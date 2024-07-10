@@ -492,6 +492,9 @@ class SymbolLib():
     generator: Optional[str] = None
     """The ``generator`` token attribute defines the program used to write the file"""
 
+    generator_version: Optional[str] = None
+    """The ``generator_version`` token attribute defines the kicad version used to write the file"""
+
     symbols: List[Symbol] = field(default_factory=list)
     """The ``symbols`` token defines a list of zero or more symbols that are part of the symbol library"""
 
@@ -548,6 +551,7 @@ class SymbolLib():
         for item in exp[1:]:
             if item[0] == 'version': object.version = item[1]
             elif item[0] == 'generator': object.generator = item[1]
+            elif item[0] == 'generator_version': object.generator_version = item[1]
             elif item[0] == 'symbol': object.symbols.append(Symbol().from_sexpr(item))
         return object
 
@@ -583,8 +587,10 @@ class SymbolLib():
         """
         indents = ' '*indent
         endline = '\n' if newline else ''
+        generator = f' (generator {self.generator})' if self.generator is not None else ''
+        generator_version = f' (generator_version {self.generator_version})' if self.generator_version is not None else ''
 
-        expression =  f'{indents}(kicad_symbol_lib (version {self.version}) (generator {self.generator})\n'
+        expression =  f'{indents}(kicad_symbol_lib (version {self.version}){generator}{generator_version}\n'
         for item in self.symbols:
             expression += f'{indents}{item.to_sexpr(indent+2)}'
         expression += f'{indents}){endline}'
