@@ -148,18 +148,17 @@ class SymbolPin():
         for item in exp[3:]:
             if type(item) != type([]):
                 if item == 'hide': object.hide = True
-                else: continue
-            if item[0] == 'at': object.position = Position().from_sexpr(item)
-            if item[0] == 'length': object.length = item[1]
-            if item[0] == 'name':
+            elif item[0] == 'at': object.position = Position().from_sexpr(item)
+            elif item[0] == 'length': object.length = item[1]
+            elif item[0] == 'name':
                 object.name = item[1]
                 if len(item) > 2:
                     object.nameEffects = Effects().from_sexpr(item[2])
-            if item[0] == 'number':
+            elif item[0] == 'number':
                 object.number = item[1]
                 if len(item) > 2:
                     object.numberEffects = Effects().from_sexpr(item[2])
-            if item[0] == 'alternate': object.alternatePins.append(SymbolAlternativePin().from_sexpr(item))
+            elif item[0] == 'alternate': object.alternatePins.append(SymbolAlternativePin().from_sexpr(item))
         return object
 
     def to_sexpr(self, indent: int = 4, newline: bool = True) -> str:
@@ -379,31 +378,31 @@ class Symbol():
         object.libId = exp[1]
         for item in exp[2:]:
             if item[0] == 'extends': object.extends = item[1]
-            if item[0] == 'pin_numbers':
+            elif item[0] == 'pin_numbers':
                 if item[1] == 'hide':
                     object.hidePinNumbers = True
-            if item[0] == 'pin_names':
+            elif item[0] == 'pin_names':
                 object.pinNames = True
                 for property in item[1:]:
                     if type(property) == type([]):
                         if property[0] == 'offset': object.pinNamesOffset = property[1]
                     else:
                         if property == 'hide': object.pinNamesHide = True
-            if item[0] == 'in_bom': object.inBom = True if item[1] == 'yes' else False
-            if item[0] == 'on_board': object.onBoard = True if item[1] == 'yes' else False
-            if item[0] == 'power': object.isPower = True
+            elif item[0] == 'in_bom': object.inBom = True if item[1] == 'yes' else False
+            elif item[0] == 'on_board': object.onBoard = True if item[1] == 'yes' else False
+            elif item[0] == 'power': object.isPower = True
 
-            if item[0] == 'symbol': object.units.append(Symbol().from_sexpr(item))
-            if item[0] == 'property': object.properties.append(Property().from_sexpr(item))
+            elif item[0] == 'symbol': object.units.append(Symbol().from_sexpr(item))
+            elif item[0] == 'property': object.properties.append(Property().from_sexpr(item))
 
-            if item[0] == 'pin': object.pins.append(SymbolPin().from_sexpr(item))
-            if item[0] == 'arc': object.graphicItems.append(SyArc().from_sexpr(item))
-            if item[0] == 'circle': object.graphicItems.append(SyCircle().from_sexpr(item))
-            if item[0] == 'curve': object.graphicItems.append(SyCurve().from_sexpr(item))
-            if item[0] == 'polyline': object.graphicItems.append(SyPolyLine().from_sexpr(item))
-            if item[0] == 'rectangle': object.graphicItems.append(SyRect().from_sexpr(item))
-            if item[0] == 'text': object.graphicItems.append(SyText().from_sexpr(item))
-            if item[0] == 'text_box': object.graphicItems.append(SyTextBox().from_sexpr(item))
+            elif item[0] == 'pin': object.pins.append(SymbolPin().from_sexpr(item))
+            elif item[0] == 'arc': object.graphicItems.append(SyArc().from_sexpr(item))
+            elif item[0] == 'circle': object.graphicItems.append(SyCircle().from_sexpr(item))
+            elif item[0] == 'curve': object.graphicItems.append(SyCurve().from_sexpr(item))
+            elif item[0] == 'polyline': object.graphicItems.append(SyPolyLine().from_sexpr(item))
+            elif item[0] == 'rectangle': object.graphicItems.append(SyRect().from_sexpr(item))
+            elif item[0] == 'text': object.graphicItems.append(SyText().from_sexpr(item))
+            elif item[0] == 'text_box': object.graphicItems.append(SyTextBox().from_sexpr(item))
 
         return object
 
@@ -548,8 +547,8 @@ class SymbolLib():
 
         for item in exp[1:]:
             if item[0] == 'version': object.version = item[1]
-            if item[0] == 'generator': object.generator = item[1]
-            if item[0] == 'symbol': object.symbols.append(Symbol().from_sexpr(item))
+            elif item[0] == 'generator': object.generator = item[1]
+            elif item[0] == 'symbol': object.symbols.append(Symbol().from_sexpr(item))
         return object
 
     def to_file(self, filepath = None, encoding: Optional[str] = None):
