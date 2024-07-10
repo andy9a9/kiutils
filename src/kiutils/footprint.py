@@ -716,6 +716,9 @@ class Footprint():
     generator: Optional[str] = None
     """The ``generator`` token attribute defines the program used to write the file"""
 
+    generator_version: Optional[str] = None
+    """The ``generator_version`` token attribute defines the kicad version used to write the file"""
+
     locked: bool = False
     """The optional ``locked`` token defines a flag to indicate the footprint cannot be edited"""
 
@@ -864,6 +867,7 @@ class Footprint():
                 elif item == 'placed': object.placed = True
             elif item[0] == 'version': object.version = item[1]
             elif item[0] == 'generator': object.generator = item[1]
+            elif item[0] == 'generator_version': object.generator_version = item[1]
             elif item[0] == 'layer': object.layer = item[1]
             elif item[0] == 'tedit': object.tedit = item[1]
             elif item[0] == 'tstamp': object.tstamp = item[1]
@@ -1021,9 +1025,10 @@ class Footprint():
         placed = ' placed' if self.placed else ''
         version = f' (version {self.version})' if self.version is not None else ''
         generator = f' (generator {self.generator})' if self.generator is not None else ''
+        generator_version = f' (generator_version {self.generator_version})' if self.generator_version is not None else ''
         tstamp = f' (tstamp {self.tstamp})' if self.tstamp is not None else ''
 
-        expression =  f'{indents}(footprint "{dequote(self.libId)}"{locked}{placed}{version}{generator}'
+        expression =  f'{indents}(footprint "{dequote(self.libId)}"{locked}{placed}{version}{generator}{generator_version}'
         if layerInFirstLine:
             expression += f' (layer "{dequote(self.layer)}")\n'
         else:
