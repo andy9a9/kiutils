@@ -448,8 +448,8 @@ class Effects():
     justify: Justify = field(default_factory=lambda: Justify())
     """The ``justify`` token defines the justification of the text"""
 
-    hide: bool = False
-    """The optional ``hide`` token defines if the text is hidden"""
+    hide: object = bool(False)
+    """The ``hide`` token defines if the text is hidden"""
 
     href: Optional[str] = None
     """The optional ``href`` token specifies a link that the text element represents.
@@ -479,7 +479,8 @@ class Effects():
         object = cls()
         for item in exp:
             if type(item) != type([]):
-                if item == 'hide': object.hide = True
+                if item == 'hide': object.hide = bool(True)
+            elif item[0] == 'hide': object.hide = [True if item[1] == 'yes' else False]
             elif item[0] == 'font': object.font = Font().from_sexpr(item)
             elif item[0] == 'justify': object.justify = Justify().from_sexpr(item)
             elif item[0] == 'href': object.href = item[1]
@@ -499,7 +500,13 @@ class Effects():
         endline = '\n' if newline else ''
 
         justify = f' {self.justify.to_sexpr()}' if self.justify.to_sexpr() != '' else ''
-        hide = f' hide' if self.hide else ''
+        if self.hide:
+            if isinstance(self.hide, bool):
+                hide = f' hide' if self.hide else ''
+            else:
+                hide = f' (hide {"yes" if self.hide[0] else "no"})'
+        else:
+            hide = ''
         href = f' (href "{dequote(self.href)}")' if self.href is not None else ''
 
         expression =  f'{indents}(effects {self.font.to_sexpr()}{justify}{href}{hide}){endline}'
